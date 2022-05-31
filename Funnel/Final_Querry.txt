@@ -1,0 +1,28 @@
+# This gives count of all the different events based on user entered Community or Home
+
+SELECT "Community",count(DAU) as DAU,COUNT(C_or_H) as Com_or_Home,COUNT(Payment) as Payment,COUNT(Orders) as Orders
+FROM (SELECT distinct q.user_id,t1.step as DAU,t2.step as C_or_h ,t3.step as Payment,t4.step as Orders from ques q
+left join (SELECT order_date,user_id,step from ques where step = "Dau") t1 
+				on q.order_date = t1.order_date and q.user_id = t1.user_id
+left join (SELECT order_date,user_id,step from ques where step = "Community" or step = "Home") t2
+				on q.order_date = t2.order_date and q.user_id = t2.user_id
+left join (SELECT order_date,user_id,step from ques where step = "Payment") t3
+				on q.order_date = t3.order_date and q.user_id = t3.user_id
+left join (SELECT order_date,user_id,step from ques where step = "Order") t4
+				on q.order_date = t4.order_date and q.user_id = t4.user_id) q
+WHERE C_or_H = "Community"
+union
+SELECT "Home",count(DAU),COUNT(C_or_H),COUNT(Payment),COUNT(Orders)
+FROM (SELECT distinct q.user_id,t1.step as DAU,t2.step as C_or_h ,t3.step as Payment,t4.step as Orders from ques q
+left join (SELECT order_date,user_id,step from ques where step = "Dau") t1 
+				on q.order_date = t1.order_date and q.user_id = t1.user_id
+left join (SELECT order_date,user_id,step from ques where step = "Community" or step = "Home") t2
+				on q.order_date = t2.order_date and q.user_id = t2.user_id
+left join (SELECT order_date,user_id,step from ques where step = "Payment") t3
+				on q.order_date = t3.order_date and q.user_id = t3.user_id
+left join (SELECT order_date,user_id,step from ques where step = "Order") t4
+				on q.order_date = t4.order_date and q.user_id = t4.user_id) q
+WHERE C_or_H = "Home";
+ 
+ 
+ 
